@@ -47,6 +47,24 @@ neo4j-docker/data/
 neo4j-docker/logs/
 neo4j-docker/plugins/
 
+# Neo4j DB 파일
+neostore*
+*.transaction.db.*
+checkpoint.*
+database_lock
+store_lock
+server_id
+id-buffer.tmp.*
+auth.ini
+
+# 일반 DB 파일
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sql
+
 # 로그
 *.log
 logs/
