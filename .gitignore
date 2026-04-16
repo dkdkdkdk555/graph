@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 가상환경
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# 환경변수 / 시크릿
+.env.local
+.env.*.local
+*.secret
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# FAISS 인덱스
+*.faiss
+*.index
+
+# Neo4j Docker 볼륨 데이터
+neo4j-docker/data/
+neo4j-docker/logs/
+neo4j-docker/plugins/
+
+# 로그
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# 테스트 / 커버리지
+.pytest_cache/
+.coverage
+htmlcov/
