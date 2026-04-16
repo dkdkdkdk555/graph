@@ -1,0 +1,15 @@
+# 1. Homebrew로 neo4j 설치
+brew install neo4j
+
+# 2. neo4j 시작
+brew services start neo4j
+
+# 3. 상태 확인
+brew services list
+
+# 브라우저에서 접속
+http://localhost:7474
+
+로그인 정보:
+ID: neo4j
+PW: dnrgus****
