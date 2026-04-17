@@ -70,17 +70,25 @@ def handle_upload_file(file):
 
 # RAG를 사용한 응답 생성 함수
 def get_rag_response(user_query, vectorstore, callback_handler):
-    """ 검색된 문서를 기반으로 사용자 질문에 대한 답변을 생성. """
+    """ 검색된 문서를 기반으로 사용자 질문에 대한 답변을 생성. 문서가 없으면 일반 대화로 응답. """
+    chat_model = ChatOllama(model="gpt-oss:120b-cloud", callbacks=[callback_handler])
+
     if not vectorstore:
-        st.error("벡터 스토어가 없습니다. 문서를 먼저 업로드하세요.")
-        return ""
-    
+        # PDF 없이 모델과 직접 대화
+        direct_prompt = [
+            SystemMessage(content="당신은 친절한 AI 어시스턴트입니다. 사용자의 질문에 성실하게 답변하세요."),
+            HumanMessage(content=user_query)
+        ]
+        try:
+            response = chat_model.invoke(direct_prompt)
+            return response.content
+        except Exception as e:
+            st.error(f"응답 생성 중 오류가 발생했습니다: {e}")
+            return ""
+
     # 가장 유사한 문서 3개 검색
     retrieved_docs = vectorstore.similarity_search(user_query, k=3)
     retrieved_text = "\n".join(f"문서 {i+1}: {doc.page_content}" for i, doc in enumerate(retrieved_docs))
-
-    # LLM 설정
-    chat_model = ChatOllama(model="gpt-oss:120b-cloud", callbacks=[callback_handler])
 
     # RAG 프롬프트 생성
     rag_prompt = [
@@ -93,7 +101,7 @@ def get_rag_response(user_query, vectorstore, callback_handler):
         return response.content
     except Exception as e:
         st.error(f"RAG 응답 생성 중 오류가 발생했습니다: {e}")
-        return ""   
+        return ""
     
 # Streamlit UI
 st.set_page_config(page_title="PDF 기반 Q&A챗봇")
@@ -104,7 +112,7 @@ if "vectorstore" not in st.session_state:
     st.session_state["vectorstore"] = None
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = [
-        ChatMessage(role="assistant", content="안녕하세요! 업로드된 문서를 기반으로 질문해 주세요.")
+        ChatMessage(role="assistant", content="안녕하세요! PDF를 업로드하면 문서 기반으로, 없어도 자유롭게 대화할 수 있습니다.")
     ]
 
 
